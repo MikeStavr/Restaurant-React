@@ -1,74 +1,61 @@
 import { useState } from "react";
 
 export default function UploadForm({ onCreate }) {
-  let [dishName, setDishName] = useState("");
-  let [dishPrice, setDishPrice] = useState("");
-  let [dishImage, setDishImage] = useState("");
+  const [file, setFile] = useState(null);
+  const [dishName, setDishName] = useState("");
+  const [dishPrice, setDishPrice] = useState("");
+  const [dishDescription, setDishDescription] = useState("");
+
+  const handleChangePrice = (e) => {
+    const result = e.target.value.replace(/\D/g, "");
+    setDishPrice(result);
+  };
+
   return (
     <>
-      <div className="container">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (dishName !== "" && dishPrice !== "" && dishImage !== "") {
-              onCreate({ name: dishName, price: dishPrice, image: dishImage });
-              setDishName("");
-              setDishPrice("");
-              setDishImage("");
-            }
-          }}
-          className="mt-4"
-          method="POST"
-          encType="multipart/form-data"
-        >
-          <div className="input-group mb-3">
-            <span className="input-group-text" id="dishName">
-              Dish name
-            </span>
-            <input
-              type="text"
-              value={dishName}
-              className="form-control"
-              placeholder="Dish name"
-              onChange={(e) => setDishName(e.target.value)}
-              aria-label="dishname"
-              aria-describedby="dishName"
-            />
-          </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!file || !dishName || !dishPrice || !dishDescription) return;
+          onCreate({
+            image: file.name,
+            name: dishName,
+            price: parseInt(dishPrice),
+            description: dishDescription,
+          });
+          console.log(file);
+          console.log(file.name);
+          console.log(dishName);
+          console.log(dishPrice);
+          console.log(dishDescription);
 
-          <div className="input-group mb-3">
-            <span className="input-group-text" id="dishprice">
-              Dish price
-            </span>
-            <input
-              type="text"
-              value={dishPrice}
-              className="form-control"
-              onChange={(e) => setDishPrice(e.target.value)}
-              placeholder="Dish price"
-              aria-label="dishprice"
-              aria-describedby="dishprice"
-            />
-          </div>
-          <div className="input-group mb-3">
-            <span className="input-group-text" id="dishprice">
-              Dish image
-            </span>
-            <input
-              type="file"
-              value={dishImage}
-              className="form-control"
-              placeholder="Dish image"
-              onChange={(e) => setDishImage(e.target.value)}
-              aria-label="dishImage"
-              aria-describedby="dishImage"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Submit dish
-          </button>
-        </form>
-      </div>
+          setFile(null);
+          setDishName("");
+          setDishPrice("");
+          setDishDescription("");
+        }}
+      >
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+        <input
+          type="text"
+          value={dishName}
+          placeholder="Dish Name"
+          onChange={(e) => setDishName(e.target.value)}
+        />
+        <input
+          type="text"
+          value={dishPrice}
+          placeholder="Dish Price"
+          onChange={handleChangePrice}
+        />
+        <input
+          type="text"
+          value={dishDescription}
+          placeholder="Dish Description"
+          onChange={(e) => setDishDescription(e.target.value)}
+        />
+        <button type="submit">Submit</button>
+      </form>
     </>
   );
 }

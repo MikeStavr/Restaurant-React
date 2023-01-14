@@ -11,33 +11,38 @@ exports.initdb = () => {
   sequelize
     .authenticate()
     .then(() => {
-      console.log("Established connection.");
+      console.log("Connection has been established successfully.");
     })
-    .catch((error) => {
-      console.log("Error occurred while establishing connection: ", error);
+    .catch((err) => {
+      console.error("Unable to connect to the database:", err);
     });
-  sequelize.define("menu", {
-    dishName: {
-      allowNull: false,
+
+  const dishModel = sequelize.define("menu", {
+    image: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    dishName: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     dishPrice: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      type: DataTypes.STRING,
     },
-    image: {
-      allowNull: false,
+    dishDescription: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
   });
 
   sequelize
     .sync()
     .then(() => {
-      console.log('Table "menu" was created successfully.');
+      console.log('"Menu" table successfully created.');
     })
-    .catch((error) => {
-      console.log("Error while creating table: ", error);
+    .catch((err) => {
+      console.error("Unable to create the table:", err);
     });
   return sequelize;
 };

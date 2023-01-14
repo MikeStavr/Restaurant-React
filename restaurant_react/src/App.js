@@ -7,23 +7,23 @@ export default function App() {
   const [dishes, setDishes] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/all").then((allDishes) => {
-      setDishes(allDishes.data);
-    });
-  });
+    axios
+      .get("http://localhost:8080/all")
+      .then((dishes) => setDishes(dishes.data));
+  }, []);
   return (
     <>
       <UploadForm
-        onCreate={(d) => {
+        onCreate={(dish) => {
           axios
-            .post("http://localhost:8080/upload", {
-              dishName: d.name,
-              dishPrice: d.price,
-              image: d.image,
+            .post("http://localhost:8080/create", {
+              image: dish.image,
+              dishName: dish.name,
+              dishPrice: dish.price,
+              dishDescription: dish.description,
             })
-            .then((dish) => {
-              let newDishes = [...dishes, dish.data];
-              setDishes(newDishes);
+            .then((d) => {
+              setDishes([...dishes, d.data]);
             });
         }}
       />
