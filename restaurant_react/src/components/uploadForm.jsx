@@ -5,7 +5,7 @@ export default function UploadForm({ onCreate }) {
   const [dishName, setDishName] = useState("");
   const [dishPrice, setDishPrice] = useState("");
   const [dishDescription, setDishDescription] = useState("");
-
+  const [fileName, setFileName] = useState("");
   const handleChangePrice = (e) => {
     const result = e.target.value.replace(/\D/g, "");
     setDishPrice(result);
@@ -16,45 +16,78 @@ export default function UploadForm({ onCreate }) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (!file || !dishName || !dishPrice || !dishDescription) return;
+          if (!file || !dishName || !dishPrice || !dishDescription) {
+            alert("Please fill in all fields");
+            return;
+          }
           onCreate({
-            image: file.name,
+            image: file,
             name: dishName,
             price: parseInt(dishPrice),
             description: dishDescription,
           });
-          console.log(file);
-          console.log(file.name);
-          console.log(dishName);
-          console.log(dishPrice);
-          console.log(dishDescription);
-
           setFile(null);
           setDishName("");
+          setFileName("");
           setDishPrice("");
           setDishDescription("");
         }}
       >
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <input
-          type="text"
-          value={dishName}
-          placeholder="Dish Name"
-          onChange={(e) => setDishName(e.target.value)}
-        />
-        <input
-          type="text"
-          value={dishPrice}
-          placeholder="Dish Price"
-          onChange={handleChangePrice}
-        />
-        <input
-          type="text"
-          value={dishDescription}
-          placeholder="Dish Description"
-          onChange={(e) => setDishDescription(e.target.value)}
-        />
-        <button type="submit">Submit</button>
+        <div className="card mx-auto mt-3" style={{ width: "50rem" }}>
+          <div className="input-group mb-3">
+            <span className="input-group-text">Dish name</span>
+            <input
+              type="text"
+              value={dishName}
+              onChange={(e) => {
+                setDishName(e.target.value);
+              }}
+              className="form-control"
+              aria-label="dish name"
+            />
+          </div>
+          <div className="input-group mb-3">
+            <span className="input-group-text">Dish price</span>
+            <input
+              type="text"
+              value={dishPrice}
+              onChange={handleChangePrice}
+              className="form-control"
+              aria-label="dish price"
+            />
+          </div>
+          <div className="input-group mb-3">
+            <span className="input-group-text">Dish description</span>
+            <textarea
+              rows={2}
+              value={dishDescription}
+              onChange={(e) => {
+                setDishDescription(e.target.value);
+              }}
+              className="form-control"
+              aria-label="dish name"
+            />
+          </div>{" "}
+          <div className="input-group mb-3">
+            <input
+              type="file"
+              value={fileName}
+              onChange={(e) => {
+                setFileName(e.target.value);
+                setFile(e.target.files[0]);
+              }}
+              className="form-control"
+              aria-label="dish name"
+            />
+          </div>
+          <button
+            type="submit"
+            className="btn btn-primary mx-auto"
+            style={{ width: "50%" }}
+          >
+            Add dish
+          </button>
+        </div>
       </form>
     </>
   );

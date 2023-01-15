@@ -16,18 +16,28 @@ export default function App() {
       <UploadForm
         onCreate={(dish) => {
           axios
-            .post("http://localhost:8080/create", {
-              image: dish.image,
-              dishName: dish.name,
-              dishPrice: dish.price,
-              dishDescription: dish.description,
-            })
+            .post(
+              "http://localhost:8080/create",
+              {
+                image: dish.image,
+                dishName: dish.name,
+                dishPrice: dish.price,
+                dishDescription: dish.description,
+              },
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            )
             .then((d) => {
               setDishes([...dishes, d.data]);
             });
         }}
       />
-      <MenuList dishes={dishes} />
+      <div className="row">
+        <MenuList dishes={dishes} />
+      </div>
     </>
   );
 }
