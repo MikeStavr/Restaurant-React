@@ -6,6 +6,7 @@ const database = require("./database");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const { get } = require("http");
 
 const app = express();
 const PORT = 8080;
@@ -17,9 +18,33 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+function getId(req) {
+  const id = req.params.id;
+  if (/^\d+$/.test(id)) {
+    return Number.parseInt(id);
+  }
+  throw new TypeError("Invalid id");
+}
+
 app.get("/all", async (req, res) => {
   const allDishes = await db.models.menu.findAll();
   res.status(200).send(allDishes);
+});
+
+app.delete("/delete/:id", async (req, res) => {
+  const id = getId(req);
+  await db.models.menu
+    .destroy({
+      where: {
+        id,
+      },
+    })
+    .then(() => {
+      res.status(200).end();
+    })
+    .catch((error) => {
+      res.status(400).send("Bad request on delete", error);
+    });
 });
 
 const addDish = async (req, res) => {
