@@ -30,6 +30,10 @@ exports.initdb = () => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    dishCategory: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     dishDescription: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -6,17 +6,18 @@ const database = require("./database");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
-const { get } = require("http");
 
 const app = express();
 const PORT = 8080;
 
 const db = database.initdb();
 
+app.use(cors());
 app.use("/public", express.static("./public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+
+const lastDishImage = "";
 
 function getId(req) {
   const id = req.params.id;
@@ -53,13 +54,17 @@ const addDish = async (req, res) => {
     dishName: req.body.dishName,
     dishPrice: req.body.dishPrice,
     dishDescription: req.body.dishDescription,
+    dishCategory: req.body.dishCategory,
   };
   const dish = await db.models.menu.create({
     image: data.image,
     dishName: data.dishName,
     dishPrice: data.dishPrice,
     dishDescription: data.dishDescription,
+    dishCategory: data.dishCategory,
   });
+  lastDishImage = data.image;
+  console.log(lastDishImage);
   res.status(201).send(dish);
   // console.log(dish);
 };
