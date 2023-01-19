@@ -94,6 +94,7 @@ class UploadForm extends React.Component {
                   this.setState({ fileName: e.target.value });
                   this.setState({ file: e.target.files[0] });
                 }}
+                accept="image/png, image/gif, image/jpeg"
                 className="form-control"
                 aria-label="dish name"
               />
@@ -105,6 +106,7 @@ class UploadForm extends React.Component {
                 onChange={(e) => {
                   this.setState({ dishCategory: e.target.value });
                 }}
+                value={this.state.dishCategory}
               >
                 <option value="appetizers" defaultChecked>
                   Appetizers

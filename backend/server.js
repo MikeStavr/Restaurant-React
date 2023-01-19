@@ -17,7 +17,6 @@ app.use("/public", express.static("./public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const lastDishImage = "";
 
 function getId(req) {
   const id = req.params.id;
@@ -63,8 +62,6 @@ const addDish = async (req, res) => {
     dishDescription: data.dishDescription,
     dishCategory: data.dishCategory,
   });
-  lastDishImage = data.image;
-  console.log(lastDishImage);
   res.status(201).send(dish);
   // console.log(dish);
 };
@@ -97,7 +94,7 @@ const upload = multer({
     } else {
       cb(
         "Error: File upload only supports the following filetypes - " +
-          fileTypes
+        fileTypes
       );
     }
   },
