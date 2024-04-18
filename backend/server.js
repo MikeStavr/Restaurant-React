@@ -12,6 +12,8 @@ const PORT = 8080;
 
 const db = database.initdb();
 
+
+
 app.use(cors());
 app.use("/public", express.static("./public"));
 app.use(bodyParser.json());
